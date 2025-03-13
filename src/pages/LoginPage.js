@@ -25,7 +25,8 @@ const LoginPage = ({ onLogin }) => {
     <div className="flex flex-col items-center justify-center min-h-screen">
       <h2 className="text-2xl font-bold mb-4">로그인</h2>
       {error && <p className="text-red-500 mb-2">{error}</p>}
-      <form onSubmit={handleSubmit} className="bg-gray-100 p-6 rounded shadow-md">
+
+      <form onSubmit={handleSubmit} className="bg-gray-100 p-6 rounded shadow-md w-80">
         <div className="mb-4">
           <label className="block mb-1">이메일</label>
           <input
@@ -36,6 +37,7 @@ const LoginPage = ({ onLogin }) => {
             required
           />
         </div>
+
         <div className="mb-4">
           <label className="block mb-1">비밀번호</label>
           <input
@@ -46,10 +48,22 @@ const LoginPage = ({ onLogin }) => {
             required
           />
         </div>
-        <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded">
+
+        <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded w-full">
           로그인
         </button>
       </form>
+
+      {/* 회원가입 버튼 추가 */}
+      <p className="mt-4 text-sm">
+        계정이 없으신가요?
+        <button
+          onClick={() => navigate("/signup")} // ✅ 회원가입 페이지로 이동
+          className="text-blue-500 underline ml-2"
+        >
+          회원가입
+        </button>
+      </p>
     </div>
   );
 };

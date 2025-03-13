@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom"; // ✅ useNavigate 추가
 
 // JWT 토큰에서 user_id 추출하는 함수
 const getUserIdFromToken = () => {
@@ -18,6 +19,7 @@ const UniversityList = ({ universities, onUniversityClick }) => {
     const [favoriteUniversities, setFavoriteUniversities] = useState([]);
     const userId = getUserIdFromToken();
     const token = localStorage.getItem("token");
+    const navigate = useNavigate(); // ✅ useNavigate 훅 사용
 
     // 관심 대학 목록 가져오기
     useEffect(() => {
@@ -91,6 +93,7 @@ const UniversityList = ({ universities, onUniversityClick }) => {
                         <th>Quota</th>
                         <th>Min GPA</th>
                         <th>Actions</th> {/* 새로운 컬럼 추가 */}
+                        <th>Chat</th> {/* 새로운 컬럼 추가 */}
                     </tr>
                 </thead>
                 <tbody>
@@ -118,6 +121,17 @@ const UniversityList = ({ universities, onUniversityClick }) => {
                                         }}
                                     >
                                         {isFavorite ? "관심등록 제거" : "관심 대학 추가"}
+                                    </button>
+                                </td>
+                                <td>
+                                    <button
+                                        className="btn btn-primary"
+                                        onClick={(e) => {
+                                            e.stopPropagation(); // 부모 클릭 이벤트 방지
+                                            navigate(`/chat/${university.univId}`);
+                                        }}
+                                    >
+                                        채팅하기
                                     </button>
                                 </td>
                             </tr>
