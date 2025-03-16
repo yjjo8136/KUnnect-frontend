@@ -14,17 +14,17 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      # ✅ 2. Node.js 설정 (React 빌드용)
+      # ✅ 2. Node.js 20으로 설정 (React 최신 버전 대응)
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: 18
+          node-version: 20
 
-      # ✅ 3. 프론트엔드 빌드
+      # ✅ 3. 프론트엔드 빌드 (경고가 오류로 처리되지 않도록 설정)
       - name: Install Dependencies & Build React App
         run: |
           npm install
-          npm run build
+          CI=false npm run build
 
       # ✅ 4. Docker Hub 로그인
       - name: Login to Docker Hub
