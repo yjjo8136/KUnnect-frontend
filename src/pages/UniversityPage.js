@@ -3,6 +3,8 @@ import UniversityList from "../components/UniversityList";
 import UniversityMap from "../components/UniversityMap";
 import { getUniversities } from "../services/universityService";
 
+const API_URL = process.env.REACT_APP_API_URL;
+
 const UniversityPage = () => {
     const [universities, setUniversities] = useState([]);
     const [selectedContinent, setSelectedContinent] = useState("");
@@ -43,7 +45,8 @@ const UniversityPage = () => {
         }
 
         try {
-            const response = await fetch(`http://localhost:8080/api/user/${userId}/interests/${univId}`, {
+            console.log("fdsfasfd");
+            const response = await fetch(`${API_URL}/api/user/${userId}/interests/${univId}`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

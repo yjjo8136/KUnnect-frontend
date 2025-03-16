@@ -3,6 +3,8 @@ import { useParams } from "react-router-dom";
 import { Stomp } from "@stomp/stompjs";
 import SockJS from "sockjs-client";
 
+const API_URL = process.env.REACT_APP_API_URL;
+
 const ChatPage = () => {
     const { univId } = useParams();
     const [stompClient, setStompClient] = useState(null);
@@ -34,7 +36,7 @@ const ChatPage = () => {
     // ✅ 기존 채팅 기록 불러오기
     const fetchChatHistory = async () => {
         try {
-            const response = await fetch(`http://localhost:8080/api/chat/${univId}`);
+            const response = await fetch(`${API_URL}/api/chat/${univId}`);
             if (response.ok) {
                 const data = await response.json();
                 setMessages(data);
@@ -50,7 +52,7 @@ const ChatPage = () => {
             return;
         }
 
-        const socket = new SockJS("http://localhost:8080/ws");
+        const socket = new SockJS(`${API_URL}/ws`);
         const stomp = Stomp.over(socket);
 
         stomp.connect(

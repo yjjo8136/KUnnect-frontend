@@ -1,7 +1,9 @@
+const CHAT_URL = process.env.REACT_APP_CHAT_URL;
+
 let socket = null;
 
 export const connectWebSocket = (univId, onMessageReceived) => {
-    socket = new WebSocket(`ws://localhost:8080/chat/${univId}`); // 백엔드 WebSocket 엔드포인트
+    socket = new WebSocket(`${CHAT_URL}/chat/${univId}`); // 백엔드 WebSocket 엔드포인트
 
     socket.onopen = () => {
         console.log(`Connected to chat room for university ID ${univId}`);

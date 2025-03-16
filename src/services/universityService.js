@@ -1,4 +1,4 @@
-const API_URL = "http://localhost:8080/api/universities";
+const API_URL = process.env.REACT_APP_API_URL + "/api/universities";
 
 // 🌍 대학 목록 가져오기 (필터링 및 검색 지원)
 export const getUniversities = async (continent = "", country = "", search = "") => {

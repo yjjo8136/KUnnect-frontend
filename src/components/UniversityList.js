@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom"; // ✅ useNavigate 추가
 
+const API_URL = process.env.REACT_APP_API_URL;
+
 // JWT 토큰에서 user_id 추출하는 함수
 const getUserIdFromToken = () => {
     const token = localStorage.getItem("token");
@@ -27,7 +29,7 @@ const UniversityList = ({ universities, onUniversityClick }) => {
 
         const fetchFavorites = async () => {
             try {
-                const response = await fetch(`http://localhost:8080/api/user/${userId}/interests`, {
+                const response = await fetch(`${API_URL}/api/user/${userId}/interests`, {
                     method: "GET",
                     headers: {
                         "Authorization": `Bearer ${token}`,
@@ -55,7 +57,7 @@ const UniversityList = ({ universities, onUniversityClick }) => {
 
         const isFavorite = favoriteUniversities.includes(univId);
         const method = isFavorite ? "DELETE" : "POST";
-        const url = `http://localhost:8080/api/user/${userId}/interests/${univId}`;
+        const url = `${API_URL}/api/user/${userId}/interests/${univId}`;
 
         try {
             const response = await fetch(url, {

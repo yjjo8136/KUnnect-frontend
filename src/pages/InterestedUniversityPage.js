@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 
+const API_URL = process.env.REACT_APP_API_URL;
+
 // JWT 토큰에서 user_id 추출하는 함수
 const getUserIdFromToken = () => {
     const token = localStorage.getItem("token");
@@ -31,7 +33,7 @@ const InterestedUniversityPage = () => {
             }
 
             try {
-                const response = await fetch(`http://localhost:8080/api/user/${userId}/interests`, {
+                const response = await fetch(`${API_URL}/api/user/${userId}/interests`, {
                     method: "GET",
                     headers: {
                         "Authorization": `Bearer ${token}`,
