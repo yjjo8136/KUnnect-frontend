@@ -34,14 +34,6 @@ const App = () => {
                 <Route path="/login" element={<LoginPage onLogin={handleLogin} />} />
                 <Route path="/universities" element={<UniversityPage />} />
                 <Route
-                    path="/dashboard"
-                    element={
-                        <ProtectedRoute>
-                            <Dashboard onLogout={handleLogout} />
-                        </ProtectedRoute>
-                    }
-                />
-                <Route
                     path="/favorites"
                     element={
                         <ProtectedRoute>
