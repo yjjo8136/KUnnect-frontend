@@ -27,9 +27,6 @@ const Navbar = () => {
                 <div className="collapse navbar-collapse" id="navbarNav">
                     <ul className="navbar-nav me-auto">
                         <li className="nav-item">
-                            <Link className="nav-link" to="/dashboard">대시보드</Link>
-                        </li>
-                        <li className="nav-item">
                             <Link className="nav-link" to="/universities">대학 목록</Link>
                         </li>
                         <li className="nav-item">
