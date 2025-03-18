@@ -41,7 +41,7 @@ const App = () => {
                     }
                 />
                 <Route path="/chat/:univId" element={<ChatPage />} />
-                <Route path="/" element={token ? <Navigate to="/dashboard" /> : <Navigate to="/login" />} />
+                <Route path="/" element={token ? <Navigate to="/universities" /> : <Navigate to="/login" />} />
             </Routes>
         </Router>
     );
