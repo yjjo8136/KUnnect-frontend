@@ -1,0 +1,53 @@
+name: Deploy Frontend to AWS EC2
+
+on:
+  push:
+    branches:
+      - main  # 🚀 main 브랜치에 push될 때 실행
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # ✅ 1. GitHub Repository 코드 가져오기
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      # ✅ 2. Node.js 20으로 설정 (React 최신 버전 대응)
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20
+
+      # ✅ 3. 프론트엔드 빌드 (경고가 오류로 처리되지 않도록 설정)
+      - name: Install Dependencies & Build React App
+        run: |
+          npm install
+          CI=false npm run build
+
+      # ✅ 4. Docker Hub 로그인
+      - name: Login to Docker Hub
+        run: echo "${{ secrets.DOCKERHUB_ACCESS_TOKEN }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
+
+      # ✅ 5. Docker 이미지 빌드 및 푸시 (프론트엔드)
+      - name: Build & Push Frontend Docker Image
+        run: |
+          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/kunnect-frontend:latest .
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/kunnect-frontend:latest
+
+      # ✅ 6. AWS EC2에서 프론트엔드 배포 스크립트 실행
+      - name: Deploy on AWS EC2
+        uses: appleboy/ssh-action@v0.1.10
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_PRIVATE_KEY }}
+          script: |
+            cd /home/ec2-user/kunnect || sudo mkdir -p /home/ec2-user/kunnect && cd /home/ec2-user/kunnect
+            sudo chown -R ec2-user:ec2-user /home/ec2-user/kunnect
+            sudo chmod 777 /var/run/docker.sock
+            sudo docker-compose down frontend
+            sudo docker-compose pull frontend
+            sudo docker-compose up -d frontend
+            sudo docker system prune -af
