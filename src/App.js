@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import Navbar from "./components/Navbar.js";
 import LoginPage from "./pages/LoginPage";
-import Dashboard from "./pages/Dashboard";
 import SignUpPage from "./pages/SignUpPage";
 import UniversityPage from "./pages/UniversityPage";
 import ChatPage from "./pages/ChatPage.js";
