@@ -12,28 +12,35 @@ const ChatPage = () => {
     const [messages, setMessages] = useState([]);
     const [message, setMessage] = useState("");
     const [jwtToken, setJwtToken] = useState("");
-    const [nickname, setNickname] = useState(""); // ✅ 사용자 닉네임 상태 추가
+    const [nickname, setNickname] = useState("");
 
+    // ✅ 1. 토큰 가져오기 & 닉네임 추출
     useEffect(() => {
         const storedToken = localStorage.getItem("token");
         if (storedToken) {
             setJwtToken(storedToken);
-            extractNicknameFromToken(storedToken); // ✅ 닉네임 추출
+            extractNicknameFromToken(storedToken);
         }
         fetchChatHistory();
     }, []);
 
-    // ✅ JWT 토큰에서 `nickname` 추출
+    // ✅ 2. jwtToken이 설정된 후 WebSocket 연결
+    useEffect(() => {
+        if (jwtToken) {
+            connectWebSocket();
+        }
+        return () => disconnectWebSocket();
+    }, [jwtToken]); // ✅ jwtToken이 변경된 후 실행
+
     const extractNicknameFromToken = (token) => {
         try {
-            const payload = JSON.parse(atob(token.split(".")[1])); // JWT Payload 디코딩
-            setNickname(payload.nickname); // ✅ 닉네임 설정
+            const payload = JSON.parse(atob(token.split(".")[1]));
+            setNickname(payload.nickname);
         } catch (error) {
             console.error("JWT 디코딩 오류:", error);
         }
     };
 
-    // ✅ 기존 채팅 기록 불러오기
     const fetchChatHistory = async () => {
         try {
             const response = await fetch(`${API_URL}/api/chat/${univId}`);
@@ -48,8 +55,7 @@ const ChatPage = () => {
 
     const connectWebSocket = () => {
         if (!jwtToken) {
-            alert("로그인이 필요합니다!");
-            return;
+            return; // ✅ jwtToken이 없을 때 실행하지 않음
         }
 
         const socket = new SockJS(`${API_URL}/ws`);
@@ -85,7 +91,7 @@ const ChatPage = () => {
         if (stompClient && connected) {
             const chatMessage = {
                 univId: univId,
-                sender: nickname, // ✅ 닉네임을 sender로 설정
+                sender: nickname,
                 content: message,
                 timestamp: new Date().toISOString(),
             };
@@ -101,13 +107,8 @@ const ChatPage = () => {
         <div style={{ textAlign: "center", padding: "20px" }}>
             <h2>📢 {`대학 ${univId} 채팅방`}</h2>
 
-            <div style={{ marginTop: "10px" }}>
-                {!connected ? (
-                    <button onClick={connectWebSocket}>🔌 WebSocket 연결</button>
-                ) : (
-                    <button onClick={disconnectWebSocket}>🔴 WebSocket 해제</button>
-                )}
-            </div>
+            {/* ✅ 연결 성공 시 메시지 표시 */}
+            {connected ? <p style={{ color: "green" }}>✅ 채팅방에 접속되었습니다!</p> : <p>🔌 WebSocket 연결 중...</p>}
 
             <div style={{ marginTop: "10px" }}>
                 <input
