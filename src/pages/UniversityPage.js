@@ -77,6 +77,7 @@ const UniversityPage = () => {
                     <option value="Europe">Europe</option>
                     <option value="Asia">Asia</option>
                     <option value="North America">North America</option>
+                    <option value="Oceania">Oceania</option>
                 </select>
             </div>
 
@@ -85,9 +86,11 @@ const UniversityPage = () => {
                 <label className="form-label">Filter by Country:</label>
                 <select className="form-select" value={selectedCountry} onChange={(e) => setSelectedCountry(e.target.value)}>
                     <option value="">All</option>
-                    <option value="영국">영국</option>
-                    <option value="미국">미국</option>
-                    <option value="일본">일본</option>
+                    <option value="USA">USA</option>
+                    <option value="UK">UK</option>
+                    <option value="Japan">Japan</option>
+                    <option value="Australia">Australia</option>
+                    <option value="Germany">Germany</option>
                 </select>
             </div>
 
