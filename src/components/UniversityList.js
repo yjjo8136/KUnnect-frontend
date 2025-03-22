@@ -1,4 +1,3 @@
-// components/UniversityList.js
 import React, { useState } from "react";
 import { FaPlus, FaMinus } from "react-icons/fa";
 
@@ -25,7 +24,7 @@ const UniversityList = ({ universities, onUniversityClick, addToFavorites }) => 
                         </div>
                     </div>
 
-                    {/* 상세 정보 토글 */}
+                    {/* 더보기: 펼쳤을 때만 보이는 상세 정보 */}
                     {expandedUnivId === univ.univId && (
                         <div className="mt-2 ps-3">
                             <p><strong>Continent:</strong> {univ.continent}</p>
