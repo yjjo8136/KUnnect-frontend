@@ -4,6 +4,7 @@ import Navbar from "./components/Navbar.js";
 import LoginPage from "./pages/LoginPage";
 import SignUpPage from "./pages/SignUpPage";
 import UniversityPage from "./pages/UniversityPage";
+import UniversityDetailPage from "./pages/UniversityDetailPage";
 import ChatPage from "./pages/ChatPage.js";
 import InterestedUniversityPage from "./pages/InterestedUniversityPage";
 import ProtectedRoute from "./components/ProtectedRoute";
@@ -32,6 +33,7 @@ const App = () => {
                 <Route path="/signup" element={<SignUpPage />} />
                 <Route path="/login" element={<LoginPage onLogin={handleLogin} />} />
                 <Route path="/universities" element={<UniversityPage />} />
+                <Route path="/university/:univId" element={<UniversityDetailPage />} />
                 <Route
                     path="/favorites"
                     element={

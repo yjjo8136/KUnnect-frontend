@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 const API_URL = process.env.REACT_APP_API_URL;
@@ -17,9 +17,8 @@ const getUserIdFromToken = () => {
   }
 };
 
-const UniversityList = ({ universities, onUniversityClick, addToFavorites }) => {
+const UniversityList = ({ universities, onUniversityClick }) => {
   const [favoriteUniversities, setFavoriteUniversities] = useState([]);
-  const [expandedUnivId, setExpandedUnivId] = useState(null); // ✅ 더보기 상태
   const userId = getUserIdFromToken();
   const token = localStorage.getItem("token");
   const navigate = useNavigate();
@@ -49,7 +48,7 @@ const UniversityList = ({ universities, onUniversityClick, addToFavorites }) => 
   }, [userId, token]);
 
   const toggleFavorite = async (univId, e) => {
-    e.stopPropagation(); // 카드 클릭 이벤트와 구분
+    e.stopPropagation(); // 카드 클릭 이벤트와 충돌 방지
     if (!userId || !token) {
       alert("로그인이 필요합니다.");
       return;
@@ -82,13 +81,8 @@ const UniversityList = ({ universities, onUniversityClick, addToFavorites }) => 
   };
 
   const handleChatClick = (univId, e) => {
-    e.stopPropagation(); // 카드 클릭 이벤트와 구분
+    e.stopPropagation();
     navigate(`/chat/${univId}`);
-  };
-
-  const handleExpandClick = (univId, e) => {
-    e.stopPropagation(); // 카드 클릭 이벤트와 구분
-    setExpandedUnivId(expandedUnivId === univId ? null : univId);
   };
 
   if (universities.length === 0) {
@@ -103,7 +97,6 @@ const UniversityList = ({ universities, onUniversityClick, addToFavorites }) => 
     <div className="row">
       {universities.map((university) => {
         const isFavorite = favoriteUniversities.includes(university.univId);
-        const isExpanded = expandedUnivId === university.univId;
 
         return (
           <div
@@ -148,40 +141,15 @@ const UniversityList = ({ universities, onUniversityClick, addToFavorites }) => 
                     채팅하기
                   </button>
                 </div>
-                <button
+                {/* "더보기" 버튼 클릭 시 상세 페이지로 이동 */}
+                <Link
+                  to={`/university/${university.univId}`}
                   className="btn btn-sm btn-secondary"
-                  onClick={(e) => handleExpandClick(university.univId, e)}
+                  onClick={(e) => e.stopPropagation()}
                 >
-                  {isExpanded ? "접기" : "더보기"}
-                </button>
+                  더보기
+                </Link>
               </div>
-              {/* 더보기 내용 */}
-              {isExpanded && (
-                <div className="px-3 py-2">
-                  <hr />
-                  <p className="mb-1">
-                    <strong>Duration:</strong> {university.duration}
-                  </p>
-                  <p className="mb-1">
-                    <strong>Min Completed Semesters:</strong>{" "}
-                    {university.minCompletedSemesters}
-                  </p>
-                  <p className="mb-1">
-                    <strong>Language Requirements:</strong>{" "}
-                    {university.languageRequirements}
-                  </p>
-                  <p className="mb-1">
-                    <strong>Semester Schedule:</strong>{" "}
-                    {university.semesterSchedule}
-                  </p>
-                  {university.additionalInfo && (
-                    <p className="mb-1">
-                      <strong>Additional Info:</strong>{" "}
-                      {university.additionalInfo}
-                    </p>
-                  )}
-                </div>
-              )}
             </div>
           </div>
         );
